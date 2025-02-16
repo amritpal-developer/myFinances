@@ -15,18 +15,16 @@ import {Image, StyleSheet, TouchableOpacity, View} from 'react-native';
 import CommonText from '../components/CommonText';
 import colors from '../utils/colors';
 import Profile from '../assets/svg/profile.svg';
-import CustomModal from '../components/CustomModal';
 import {useState} from 'react';
 import {useSelector} from 'react-redux';
 import {Avatar} from 'react-native-paper';
-import ImagePickerComponent from '../components/imagePicker';
 const imageUri = useSelector(state => state.image.uri);
 const Stack = createStackNavigator();
 function HeaderLeft(screen) {
   return screen == String.tabScreen ? (
     <View style={styles.headerLeftLayout}>
       <TouchableOpacity
-        onPress={()=>ImagePickerComponent()}
+        onPress={{}}
         style={styles.profileIcon}>
         {!imageUri ? (
           <Profile width={String?.fortyFive} height={String?.fortyFive} />
