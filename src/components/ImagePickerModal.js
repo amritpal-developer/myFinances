@@ -10,22 +10,18 @@ import {
 } from 'react-native';
 import { launchCamera, launchImageLibrary } from 'react-native-image-picker';
 import { String } from '../utils/String';
+import { width } from '../utils/data';
+import colors from '../utils/colors';
 
-const ImagePickerModal = ({ onRequestClose, onImageSelected ,modalVisible,style}) => {
-  const [loading, setLoading] = useState(false);
-
+const ImagePickerModal = ({ onRequestClose, onImageSelected ,modalVisible,style,animationType,setModalVisible}) => {
   const handleImagePick = async (fromCamera = false) => {
-    setLoading(true);
     const options = {
-      mediaType: 'photo',
+      mediaType: String?.photo,
       quality: 1,
       includeBase64: false,
     };
-
     const pickerFunction = fromCamera ? launchCamera : launchImageLibrary;
-
     pickerFunction(options, (response) => {
-      setLoading(false);
       if (response.didCancel) {
         onImageSelected({ success: false, error: 'User cancelled image picker' });
       } else if (response.errorCode) {
@@ -34,7 +30,7 @@ const ImagePickerModal = ({ onRequestClose, onImageSelected ,modalVisible,style}
         const imageUri = response.assets[0].uri;
         onImageSelected({ success: true, uri: imageUri });
       }
-      onClose(); // Close modal after selecting image
+      onRequestClose(); // Close modal after selecting image
     });
   };
 
@@ -43,13 +39,14 @@ const ImagePickerModal = ({ onRequestClose, onImageSelected ,modalVisible,style}
     style={style ? style : styles.modalView}
     animationType={animationType ? animationType : String?.slide}
     transparent={true}
-    visible={modalVisible}
+    visible={modalVisible?modalVisible:false}
     onRequestClose={() => {
       onRequestClose();
     }}
     onDismiss={() => {
         onRequestClose();
-    }}>
+    }}
+    >
       <View style={styles.container}>
             <View style={styles.innerContainer}>
               <TouchableOpacity

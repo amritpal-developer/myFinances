@@ -11,25 +11,41 @@ import {
   width,
 } from '../utils/data';
 import Button from '../components/Button';
-import {Image, StyleSheet, TouchableOpacity, View} from 'react-native';
+import {Alert, Image, StyleSheet, TouchableOpacity, View} from 'react-native';
 import CommonText from '../components/CommonText';
 import colors from '../utils/colors';
 import Profile from '../assets/svg/profile.svg';
 import {useState} from 'react';
 import {useSelector} from 'react-redux';
 import {Avatar} from 'react-native-paper';
+import ImagePickerModal from '../components/ImagePickerModal';
 const imageUri = useSelector(state => state.image.uri);
 const Stack = createStackNavigator();
+
 function HeaderLeft(screen) {
+  const [imageUri, setImageUri] = useState(null);
+  const [modalVisible, setModalVisible] = useState(false);
+  const handleImageSelection = data => {
+    if (data.success) {
+      setImageUri(data.uri);
+    } else {
+      Alert.alert(String?.error, data.error);
+    }
+  };
   return screen == String.tabScreen ? (
     <View style={styles.headerLeftLayout}>
+      <ImagePickerModal
+        modalVisible={modalVisible}
+        onRequestClose={() => setModalVisible(false)}
+        onImageSelected={handleImageSelection}
+      />
       <TouchableOpacity
-        onPress={{}}
+        onPress={() => setModalVisible(true)}
         style={styles.profileIcon}>
         {!imageUri ? (
           <Profile width={String?.fortyFive} height={String?.fortyFive} />
         ) : (
-          <Avatar.Image size={24} source={{uri: imageUri}} />
+          <Avatar.Image size={String?.fortyFive} source={{uri: imageUri}} />
         )}
       </TouchableOpacity>
       <CommonText
@@ -49,7 +65,7 @@ function HeaderRight(screen) {
     <Button
       style={styles.headerRightButton}
       label={String?.MyTransactions}
-      labelStyle={{color: 'white'}}
+      labelStyle={{color: colors?.white}}
     />
   ) : (
     <View></View>
@@ -66,6 +82,7 @@ export function StackNavigation() {
               headerStyle: styles.headerStyle,
               headerTitle: () => HeaderTitle(screen?.name),
               headerRight: () => HeaderRight(screen?.name),
+              headerShown: screen?.name == String.LoginScreen ? false :true,
             }}
             key={index}
             name={screen.name}
