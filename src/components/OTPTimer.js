@@ -1,13 +1,9 @@
 import React, {useState, useEffect} from 'react';
 import {View, Text, Button, StyleSheet} from 'react-native';
-import {
-  DidNotReceive,
-  DidNotReceiveWithOutTimer,
-  DidNotReceiveWithTimer,
-  resendOTPText,
-} from '../Utils/string';
 import {responsiveScreenFontSize} from 'react-native-responsive-dimensions';
 import CommonText from './CommonText';
+import { String } from '../utils/String';
+import colors from '../utils/colors';
 
 const OTPTimer = ({initialTime = 30, onResend}) => {
   const [timeLeft, setTimeLeft] = useState(initialTime);
@@ -37,14 +33,14 @@ const OTPTimer = ({initialTime = 30, onResend}) => {
         Styles={styles.timerText}
         text={
           isButtonDisabled
-            ? `${DidNotReceiveWithTimer}0:${timeLeft}`
-            : DidNotReceiveWithOutTimer
+            ? `${String?.DidNotReceiveWithTimer}0:${timeLeft}`
+            : String?.DidNotReceiveWithOutTimer
         }
       />
       {!isButtonDisabled ? (
         <Button
           style={styles.btn}
-          title={resendOTPText}
+          title={String?.resendOTPText}
           onPress={handleResend}
           disabled={isButtonDisabled}
         />
@@ -61,11 +57,11 @@ const styles = StyleSheet.create({
   timerText: {
     marginTop: '3%',
     fontSize: responsiveScreenFontSize(2),
-    color: theme?.colors?.gray,
+    color: colors?.gray,
   },
   btn: {
     marginTop: '3%',
-    color:theme?.colors?.green
+    color:colors?.green
   },
 });
 

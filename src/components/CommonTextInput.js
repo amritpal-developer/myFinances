@@ -19,26 +19,26 @@ const CommonTextInput = ({
   textContentType,
   error,
   keyboardType,
+  secureTextEntry,
 }) => {
   const [focused, setFocused] = useState(false);
   const theme = {
-    roundness: responsiveScreenFontSize(2),
+    roundness: responsiveScreenFontSize(1.5),
     colors: {
-      primary: 'white',
-      text: 'white',
-      placeholder: 'white',
-      background: 'white',
+      primary: '#FFF',
+      text: '#FFF',
+      placeholder: 'rgba(255, 255, 255, 0.6)',
     },
   };
   return (
     <TextInput
-      autoFocus={false}
-      style={Styles||styles.input}
+      autoFocus
+      style={Styles || styles.input}
       maxLength={maxLength}
       mode={OutlinedMode || 'outlined'}
       label={
-        <View style={[styles.labelContainer, focused && styles.labelFocused]}>
-          <Text style={[styles.labelText, focused && styles.labelTextFocused]}>
+        <View style={[styles.labelContainer, styles.labelFocused]}>
+          <Text style={[styles.labelText, styles.labelTextFocused]}>
             {label}
           </Text>
         </View>
@@ -48,24 +48,17 @@ const CommonTextInput = ({
       onFocus={() => setFocused(true)}
       onBlur={() => setFocused(false)}
       placeholderTextColor="rgba(255, 255, 255, 0.6)" // ✅ Light white with opacity
-      theme={{
-        roundness: 10,
-        colors: {
-          primary: '#FFF',
-          text: '#FFF',
-          placeholder: 'rgba(255, 255, 255, 0.6)',
-        },
-      }}
+      theme={theme}
+      secureTextEntry={secureTextEntry}
       // activeOutlineColor={activeOutlineColor}
       contentStyle={styles.contentStyle}
       placeholder={placeholder}
       // outlineColor='rgba(255, 255, 255, 0.3)'
-
       value={text}
       onChangeText={onChangeText}
-      // right={right}
+      right={right}
       keyboardType={keyboardType || 'number-pad'}
-      // left={left}
+      left={left}
       textContentType={textContentType}
       error={error}
     />
@@ -93,12 +86,12 @@ const styles = StyleSheet.create({
     paddingHorizontal: 4,
   },
   labelFocused: {
-    backgroundColor: '#3498DB', // ✅ Change label background when focused
+    backgroundColor: 'rgba(20,143,203,255)', // ✅ Change label background when focused
     borderRadius: 4,
     color: colors?.white,
   },
   labelText: {
-    fontSize: 14,
+    fontSize: responsiveScreenFontSize(2),
     color: colors?.white,
   },
   labelTextFocused: {

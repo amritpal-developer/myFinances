@@ -3,7 +3,6 @@ import {
   StyleSheet,
   Text,
   View,
-  TextInput,
   TouchableOpacity,
   Image,
   Dimensions,
@@ -20,27 +19,55 @@ import {
   responsiveScreenHeight,
 } from 'react-native-responsive-dimensions';
 import colors from '../utils/colors';
+import {TextInput} from 'react-native-paper';
+import auth from '@react-native-firebase/auth';
+import Button from '../components/Button';
+import { signUp } from '../utils/auth';
 const {width, height} = Dimensions.get('window');
 const Login = ({navigation}) => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [phoneNumber, setPhoneNumber] = useState('');
   const [btnDisable, setBtnDisable] = useState(true);
+  const [verificationId, setVerificationId] = useState(null);
+  const [otp, setOtp] = useState('');
+  const [showPassword, setShowPassword] = useState(false);
+
+  const verifyOtp = async () => {
+    try {
+      const credential = auth.PhoneAuthProvider.credential(verificationId, otp);
+      await auth().signInWithCredential(credential);
+      Alert.alert('Success', 'You are successfully authenticated.');
+    } catch (error) {
+      console.error(error);
+      Alert.alert('Error', 'Invalid OTP. Try again.');
+    }
+  };
   const handleLogin = () => {
     // Implement your login logic here
-    console.log('Logging in with:', email, password);
-    if (email && password) {
+    if (phoneNumber && phoneNumber.length == 10) {
+      console.log('Logging in with:', email, password);
       navigation.navigate(String?.tabScreen);
-    } else if (!email && password) {
-      Alert.alert(String?.EnterEmail);
-    } else if (!password && email) {
-      Alert.alert(String?.EnterPassword);
-    } else {
-      Alert.alert(String?.EnterRequiredDetails);
+    } else if (phoneNumber && phoneNumber.length < 10) {
+      Alert.alert(String?.validNumber);
+    } else if (!phoneNumber) {
+      Alert.alert(String?.EnterPhone);
+    }
+  };
+  const validate = () => {
+    // Implement your login logic here
+    if (Regex(String?.email, email) && !Regex(String?.password,password)) {
+      Alert.alert(String?.validEmail);
+    } else if (!Regex(String?.email, email) && Regex(String?.password,password)) {
+      Alert.alert(String?.validEmail);
+    } else if (Regex(String?.email, email) && Regex(String?.password,password)) {
+    const response= signUp(email,password);
+    console.log("response",response);
+      // navigation.navigate(String?.tabScreen);
     }
   };
   function verifyPhoneNumber() {
-    if (phoneNumber.length == 9) {
+    if (phoneNumber.length == 10) {
       setBtnDisable(false);
     } else {
       setBtnDisable(true);
@@ -49,10 +76,10 @@ const Login = ({navigation}) => {
   const sendVerificationCode = async () => {
     try {
       const confirmation = await auth().signInWithPhoneNumber(
-        `+91${phoneNumber}`,
+        `+91 ${phoneNumber}`,
       );
       Alert.alert('Verification code sent to your phone.');
-      navigation.navigate(OTPscreen, {
+      navigation.navigate(String?.OTPScreen, {
         mobile: phoneNumber,
         verificationId: confirmation?.verificationId,
       });
@@ -79,7 +106,7 @@ const Login = ({navigation}) => {
           />
         </View>
         <View style={styles.inputContainer}>
-          <CommonTextInput
+          {/* <CommonTextInput
             Styles={styles.textInput}
             text={phoneNumber}
             label={String?.PhoneLabel}
@@ -98,16 +125,42 @@ const Login = ({navigation}) => {
               setPhoneNumber(phoneNumber);
               verifyPhoneNumber();
             }}
+          /> */}
+          <CommonTextInput
+            Styles={styles.textInput}
+            text={email}
+            label={String?.email}
+            activeOutlineColor={'rgba(255, 255, 255, 0.3)'}
+            placeHolder={String?.PhonePlaceHolder}
+            textContentType={String?.TelephoneNumberText}
+            onChangeText={email => {
+              setEmail(email);
+            }}
           />
-
-          <TouchableOpacity style={styles.button} onPress={handleLogin}>
-            <Text style={styles.buttonText}>{String?.LoginScreen}</Text>
-          </TouchableOpacity>
-          {/* <TouchableOpacity style={styles.forgotPasswordButton}>
-            <Text style={styles.forgotPasswordText}>
-              {String?.ForgotPassword}
-            </Text>
-          </TouchableOpacity> */}
+          <CommonTextInput
+            Styles={styles.textInput}
+            text={password}
+            label={String?.PasswordPlaceHolder}
+            activeOutlineColor={'rgba(255, 255, 255, 0.3)'}
+            maxLength={String?.CountTen}
+            placeHolder={String?.PhonePlaceHolder}
+            secureTextEntry={showPassword}
+            right={
+              <TextInput.Icon
+                icon={showPassword ? String?.eyeIcon : String?.eyeOffIcon}
+                color={colors?.white}
+                onPress={() => setShowPassword(!showPassword)}
+              />
+            }
+            textContentType={String?.TelephoneNumberText}
+            onChangeText={password => setPassword(password)}
+          />
+          <Button
+            style={styles.button}
+            pressFunction={validate}
+            label={String?.LoginScreen}
+            labelStyle={styles.buttonText}
+          />
         </View>
         <View style={styles.signupContainer}>
           <Text style={styles.signupText}>{String?.NoAccount}</Text>

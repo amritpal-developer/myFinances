@@ -13,6 +13,7 @@ import {BottomTab, bottomTab} from '../navigation/bottomTab';
 import {Appearance} from 'react-native';
 import colors from './colors';
 import moment from 'moment';
+import OTPScreen from '../screens/OTPScreen';
 export const height = Dimensions.get('screen').height;
 export const currentMonth = moment().format('dddd');
 export const width = Dimensions.get('screen').width;
@@ -103,6 +104,7 @@ export const tabScreens = [
 ];
 export const StackScreens = [
   {name: String?.LoginScreen, component: Login},
+  {name: String?.OTPScreen, component: OTPScreen},
   {name: String?.tabScreen, component: BottomTab},
   {name: String?.historyScreen, component: History},
   // Add more screens as needed
