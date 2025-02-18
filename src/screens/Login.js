@@ -8,6 +8,7 @@ import {
   Dimensions,
   SafeAreaView,
   Alert,
+  Platform,
 } from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
 import {String} from '../utils/String';
@@ -15,14 +16,19 @@ import {Regex} from '../utils/Regex';
 import LottieView from 'lottie-react-native';
 import CommonTextInput from '../components/CommonTextInput';
 import {
+  responsiveHeight,
   responsiveScreenFontSize,
   responsiveScreenHeight,
+  responsiveScreenWidth,
 } from 'react-native-responsive-dimensions';
+import AntDesign from 'react-native-vector-icons/AntDesign';
 import colors from '../utils/colors';
 import {TextInput} from 'react-native-paper';
 import auth from '@react-native-firebase/auth';
 import Button from '../components/Button';
-import { signUp } from '../utils/auth';
+import {googleSignIn, signIn, signUp} from '../utils/auth';
+import CommonText from '../components/CommonText';
+import Google from '../assets/svg/SocialIcon/google.svg';
 const {width, height} = Dimensions.get('window');
 const Login = ({navigation}) => {
   const [email, setEmail] = useState('');
@@ -56,13 +62,19 @@ const Login = ({navigation}) => {
   };
   const validate = () => {
     // Implement your login logic here
-    if (Regex(String?.email, email) && !Regex(String?.password,password)) {
+    if (Regex(String?.email, email) && !Regex(String?.password, password)) {
       Alert.alert(String?.validEmail);
-    } else if (!Regex(String?.email, email) && Regex(String?.password,password)) {
+    } else if (
+      !Regex(String?.email, email) &&
+      Regex(String?.password, password)
+    ) {
       Alert.alert(String?.validEmail);
-    } else if (Regex(String?.email, email) && Regex(String?.password,password)) {
-    const response= signUp(email,password);
-    console.log("response",response);
+    } else if (
+      Regex(String?.email, email) &&
+      Regex(String?.password, password)
+    ) {
+      const response = signUp(email, password);
+      console.log('response', response);
       // navigation.navigate(String?.tabScreen);
     }
   };
@@ -73,6 +85,17 @@ const Login = ({navigation}) => {
       setBtnDisable(true);
     }
   }
+  const handleGoogleSignIn = async () => {
+    const response = await googleSignIn();
+    if (response.success) {
+      Alert.alert(response.user);
+      console.log('User Info:', response.user);
+      navigation.navigate(String?.tabScreen);
+    } else {
+      Alert.alert(response.error);
+      console.error('Error:', response.error);
+    }
+  };
   const sendVerificationCode = async () => {
     try {
       const confirmation = await auth().signInWithPhoneNumber(
@@ -170,6 +193,24 @@ const Login = ({navigation}) => {
             </Text>
           </TouchableOpacity>
         </View>
+
+        <View style={styles.googlepressableView}>
+          <TouchableOpacity style={styles.googlePressable} onPress={handleGoogleSignIn}>
+            <View style={styles.googleImage}>
+              <Google style={styles.googlestyle} />
+              <CommonText label={String?.google} style={styles.googleText} />
+            </View>
+          </TouchableOpacity>
+
+          {Platform.OS == 'ios' && (
+            <TouchableOpacity style={styles.applePressable} onPress={{}}>
+              <View style={styles.facebookImage}>
+                <AntDesign name="apple1" size={18} />
+                <CommonText label={String?.apple} style={styles.googleText} />
+              </View>
+            </TouchableOpacity>
+          )}
+        </View>
       </SafeAreaView>
     </LinearGradient>
   );
@@ -179,6 +220,10 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     justifyContent: 'center',
+  },
+  row: {
+    flexDirection: 'row',
+    marginVertical: '5%',
   },
   input: {
     backgroundColor: 'transparent', // ✅ No background color to blend with the design
@@ -193,9 +238,62 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     margin: '5%',
   },
+  applePressable: {
+    flex: 1,
+    height: responsiveHeight(6),
+    borderRadius: responsiveScreenFontSize(1.5),
+    alignItems: 'center',
+    justifyContent: 'center',
+    borderColor: '#000',
+    borderWidth: 2,
+    backgroundColor: colors?.white,
+  },
   countryCodeView: {
     backgroundColor: 'red',
     flex: 1,
+  },
+  googleText: {
+    color: colors?.black,
+    fontSize: 11,
+  },
+  facebookImage: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-evenly',
+    width: '100%',
+  },
+  facebookstyle: {
+    width: responsiveScreenWidth(5),
+    aspectRatio: 1,
+  },
+  googlepressableView: {
+    flex: 1,
+    flexDirection: 'row',
+    marginBottom: '2%',
+    justifyContent: 'center',
+    marginVertical:'5%'
+  },
+  googlePressable: {
+    // flex: 1,
+    backgroundColor: colors?.white,
+    height: responsiveHeight(6),
+    width: '50%',
+    borderRadius: responsiveScreenFontSize(1.5),
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginRight: '2%',
+    borderColor: '#EA4335',
+    borderWidth: 2,
+  },
+  googleImage: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-evenly',
+    width: '100%',
+  },
+  googlestyle: {
+    width: responsiveScreenWidth(5),
+    aspectRatio: 1,
   },
   codeStyle: {
     fontWeight: '500',
