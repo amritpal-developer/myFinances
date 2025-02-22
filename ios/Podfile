@@ -22,6 +22,7 @@ target 'myFinances' do
     # An absolute path to your application root.
     :app_path => "#{Pod::Config.instance.installation_root}/.."
   )
+  # $RNGoogleMobileAdsAsStaticFramework = true
   pod 'Firebase/Auth'
   pod 'Firebase/Core', :modular_headers => true
   pod 'FirebaseAuthInterop', :modular_headers => true

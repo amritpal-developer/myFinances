@@ -49,7 +49,7 @@ function HeaderLeft(screen) {
         )}
       </TouchableOpacity>
       <CommonText
-        label={String?.hi + 'name' + '\n' + String?.budgetText}
+        label={String?.hi + ' AMRITPAL' + '\n' + String?.budgetText}
         style={[styles.expenseText, {color: 'white'}]}
       />
     </View>
@@ -82,7 +82,7 @@ export function StackNavigation() {
               headerStyle: styles.headerStyle,
               headerTitle: () => HeaderTitle(screen?.name),
               headerRight: () => HeaderRight(screen?.name),
-              headerShown: screen?.name == String.LoginScreen ? false :true,
+              headerShown: screen?.name == String?.tabScreen?true:false,
             }}
             key={index}
             name={screen.name}

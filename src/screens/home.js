@@ -24,6 +24,7 @@ import {
   width,
 } from '../utils/data';
 import {renderChores, renderEarnings, renderPurchases} from '../utils/render';
+
 const Home = ({navigation}) => {
   const addItems = [{name: 'Add Items'}];
   const totalAmount = choresData
@@ -49,6 +50,7 @@ const Home = ({navigation}) => {
       <ScrollView
         style={styles.scrollContainer}
         showsVerticalScrollIndicator={false}>
+
         <View style={styles.rowLayout}>
           <View style={styles.columnLayout}>
             <CommonText

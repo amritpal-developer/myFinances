@@ -59,7 +59,7 @@ export function renderEarnings({item, index}) {
 export function renderChores({item, index}) {
   const amount = item?.amount?.split('.');
   return index == 0 ? (
-    <TouchableOpacity style={styles.addBox}>
+    <TouchableOpacity style={styles.addBox} onPress={{}}>
       <CommonText label={'+'} style={{color: 'white', fontSize: 30}} />
     </TouchableOpacity>
   ) : (

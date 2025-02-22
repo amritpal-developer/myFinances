@@ -75,7 +75,7 @@ const Login = ({navigation}) => {
     ) {
       const response = signUp(email, password);
       console.log('response', response);
-      // navigation.navigate(String?.tabScreen);
+     navigation.navigate(String?.tabScreen);
     }
   };
   function verifyPhoneNumber() {
@@ -187,7 +187,9 @@ const Login = ({navigation}) => {
         </View>
         <View style={styles.signupContainer}>
           <Text style={styles.signupText}>{String?.NoAccount}</Text>
-          <TouchableOpacity>
+          <TouchableOpacity onPress={()=>{
+            console.log('click')
+            navigation.navigate(String?.chatScreen)}}>
             <Text style={[styles.signupText, {fontWeight: 'bold'}]}>
               {String?.SignUp}
             </Text>
@@ -244,8 +246,8 @@ const styles = StyleSheet.create({
     borderRadius: responsiveScreenFontSize(1.5),
     alignItems: 'center',
     justifyContent: 'center',
-    borderColor: '#000',
-    borderWidth: 2,
+    // borderColor: '#000',
+    // borderWidth: 2,
     backgroundColor: colors?.white,
   },
   countryCodeView: {
@@ -253,7 +255,7 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   googleText: {
-    color: colors?.black,
+    color: '#0077B7',
     fontSize: 11,
   },
   facebookImage: {
@@ -282,8 +284,8 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     marginRight: '2%',
-    borderColor: '#EA4335',
-    borderWidth: 2,
+    // borderColor: '#EA4335',
+    // borderWidth: 2,
   },
   googleImage: {
     flexDirection: 'row',

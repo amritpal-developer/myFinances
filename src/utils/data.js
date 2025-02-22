@@ -14,6 +14,7 @@ import {Appearance} from 'react-native';
 import colors from './colors';
 import moment from 'moment';
 import OTPScreen from '../screens/OTPScreen';
+import ChatScreen from '../screens/ChatScreen';
 export const height = Dimensions.get('screen').height;
 export const currentMonth = moment().format('dddd');
 export const width = Dimensions.get('screen').width;
@@ -107,6 +108,7 @@ export const StackScreens = [
   {name: String?.OTPScreen, component: OTPScreen},
   {name: String?.tabScreen, component: BottomTab},
   {name: String?.historyScreen, component: History},
+  {name: String?.chatScreen, component: ChatScreen},
   // Add more screens as needed
 ];
 export const profileImage = require('../assets/png/profile.png');

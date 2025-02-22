@@ -6,6 +6,7 @@ export const String = {
   OTPScreen:'OTPScreen',
   homeScreen: 'Home',
   housing: 'Housing',
+  chatScreen:"chat",
   email:"Email",
   eyeIcon:'eye',
   google:'Sign in with Google',
