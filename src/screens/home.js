@@ -6,7 +6,7 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
-import React from 'react';
+import React, {useContext} from 'react';
 import CommonText from '../components/CommonText';
 import {PieChart} from 'react-native-gifted-charts';
 import colors from '../utils/colors';
@@ -15,6 +15,7 @@ import CommonFlatList from '../components/CommonFlatList';
 import Button from '../components/Button';
 import {
   EarningsData,
+  categoryOptions,
   choresData,
   currentMonth,
   darkTheme,
@@ -24,9 +25,20 @@ import {
   width,
 } from '../utils/data';
 import {renderChores, renderEarnings, renderPurchases} from '../utils/render';
-
+import {CommonModal} from '../components/CommonModal';
+import {useTheme as useCustomTheme} from '../utils/ThemeProvider';
 const Home = ({navigation}) => {
+  const {isDarkMode, toggleTheme} = useCustomTheme();
+  const [modalVisible, setModalVisible] = React.useState(false);
   const addItems = [{name: 'Add Items'}];
+  const themeColors = {
+    dark: 'black',
+    light: 'white',
+  };
+  const themeColorsText = {
+    light: 'black',
+    dark: 'white',
+  };
   const totalAmount = choresData
     .map(item => parseFloat(item.amount.replace('$', ''))) // Remove $ and convert to number
     .reduce((acc, curr) => acc + curr, 0)
@@ -34,35 +46,69 @@ const Home = ({navigation}) => {
     .split('.');
   function centerLabelComponent() {
     return (
-      <View style={{justifyContent: 'center', alignItems: 'center'}}>
-        <Text style={{fontSize: 18, color: 'white', fontWeight: 'bold'}}>
+      <View
+        style={{
+          justifyContent: 'center',
+          alignItems: 'center',
+        }}>
+        <Text
+          style={{
+            fontSize: 18,
+            color: isDarkMode ? colors?.white : colors?.black,
+            fontWeight: 'bold',
+          }}>
           47%
         </Text>
       </View>
     );
   }
+  const handleAddExpense = data => {
+    console.log('Added Expense:', data);
+  };
   return (
     <SafeAreaView
       style={[
         styles.container,
-        {backgroundColor: darkTheme ? darkTheme : 'black'},
+        {backgroundColor: isDarkMode ? colors.black : colors?.white},
       ]}>
       <ScrollView
-        style={styles.scrollContainer}
+        style={[
+          styles.scrollContainer,
+          {backgroundColor: isDarkMode ? colors.black : colors?.white},
+        ]}
         showsVerticalScrollIndicator={false}>
-
+        <CommonModal
+          isVisible={modalVisible}
+          onClose={() => setModalVisible(false)}
+          typeOfModal={String?.ImagePickerType}
+          onSubmit={handleAddExpense}
+          categoryList={categoryOptions}
+        />
         <View style={styles.rowLayout}>
           <View style={styles.columnLayout}>
             <CommonText
               label={`${String?.expenses}`}
-              style={[styles.expenseText, {color: 'white'}]}
+              style={[
+                styles.expenseText,
+                {color: isDarkMode ? colors?.white : colors?.black},
+              ]}
             />
-            <Text style={styles.amountText}>
+            <Text
+              style={[
+                styles.amountText,
+                {color: isDarkMode ? colors?.white : colors?.black},
+              ]}>
               {`$${totalAmount[0]}`}.
-              <Text style={styles.smallAmountText}>{totalAmount[1]}</Text>
+              <Text
+                style={[
+                  styles.smallAmountText,
+                  {color: isDarkMode ? colors?.white : colors?.black},
+                ]}>
+                {totalAmount[1]}
+              </Text>
             </Text>
           </View>
-          <View style={{padding: 20, alignItems: 'center'}}>
+          <View style={styles.pieChartView}>
             <PieChart
               data={pieData}
               donut
@@ -71,32 +117,40 @@ const Home = ({navigation}) => {
               sectionAutoFocus
               radius={String?.seventy}
               innerRadius={String?.fiftyFive}
-              innerCircleColor={colors?.black}
+              innerCircleColor={!isDarkMode ? colors?.white : colors?.black}
               centerLabelComponent={centerLabelComponent}
             />
           </View>
         </View>
         <CommonFlatList
-          renderItem={(item, index) => renderChores(item, index)}
+          renderItem={(item, index) => renderChores(item, index, isDarkMode,modalVisible)}
           contentContainerStyle={styles.contentContainerStyle}
           data={addItems.concat(choresData)}
           horizontalFlag={true}
         />
         <CommonText
           label={String?.incomeTitle}
-          style={[styles.expenseText, {color: 'white'}]}
+          style={[
+            styles.expenseText,
+            {color: isDarkMode ? colors?.white : colors?.black},
+          ]}
         />
         <CommonFlatList
-          renderItem={(item, index) => renderEarnings(item, index)}
+          renderItem={(item, index) => renderEarnings(item, index, isDarkMode)}
           data={EarningsData}
           contentContainerStyle={styles.contentContainerStyle}
           horizontalFlag={true}
         />
         <CommonText
           label={`${currentMonth} ${String?.Spend}`}
-          style={[styles.expenseText, {color: 'white'}]}
+          style={[
+            styles.expenseText,
+            {color: isDarkMode ? colors?.white : colors?.black},
+          ]}
         />
-        {purchasesData?.map((item, index) => renderPurchases(item, index))}
+        {purchasesData?.map((item, index) =>
+          renderPurchases(item, index, isDarkMode),
+        )}
       </ScrollView>
     </SafeAreaView>
   );
@@ -107,8 +161,8 @@ export default Home;
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: colors?.white,
   },
+  pieChartView: {padding: 20, alignItems: 'center'},
   rowLayout: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -127,7 +181,6 @@ const styles = StyleSheet.create({
   },
   amountText: {
     fontSize: 30,
-    color: colors?.white,
     marginTop: '5%',
     fontWeight: '600',
   },

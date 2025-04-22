@@ -1,11 +1,11 @@
 import Dashboard from '../screens/Dashboard';
 import History from '../screens/History';
 import profile from '../screens/profile';
-import Home from '../assets/svg/Home.svg';
+import Home from '../assets/svg/lightTheme/Home.svg';
 import home from '../screens/home';
-import Calculator from '../assets/svg/calculator.svg';
-import Profile from '../assets/svg/profile.svg';
-import HistoryIcon from '../assets/svg/history.svg';
+import Calculator from '../assets/svg/lightTheme/calculator.svg';
+import Profile from '../assets/svg/lightTheme/profile.svg';
+import HistoryIcon from '../assets/svg/lightTheme/history.svg';
 import {String} from './String';
 import {Dimensions, TouchableOpacity} from 'react-native';
 import Login from '../screens/Login';
@@ -15,11 +15,18 @@ import colors from './colors';
 import moment from 'moment';
 import OTPScreen from '../screens/OTPScreen';
 import ChatScreen from '../screens/ChatScreen';
+import SignUpScreen from '../screens/SignUpScreen';
+import LoadingScreen from '../screens/LoadingScreen';
 export const height = Dimensions.get('screen').height;
 export const currentMonth = moment().format('dddd');
 export const width = Dimensions.get('screen').width;
-export const darkTheme =
-  Appearance.getColorScheme() == 'dark' ? colors?.black : colors?.white;
+export const categoryOptions = [
+  { label: 'Food', value: 'food' },
+  { label: 'House Rent', value: 'house_rent' },
+  { label: 'Subscription', value: 'subscription' },
+  { label: 'Course Fee', value: 'course_fee' },
+  { label: 'Others', value: 'others' },
+];
 export const tabScreens = [
   {
     name: String?.homeScreen,
@@ -109,6 +116,8 @@ export const StackScreens = [
   {name: String?.tabScreen, component: BottomTab},
   {name: String?.historyScreen, component: History},
   {name: String?.chatScreen, component: ChatScreen},
+  {name: String?.SignUpScreen, component: SignUpScreen},
+  {name: String?.LoadingScreen, component:LoadingScreen},
   // Add more screens as needed
 ];
 export const profileImage = require('../assets/png/profile.png');

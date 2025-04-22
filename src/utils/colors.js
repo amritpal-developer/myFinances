@@ -13,6 +13,7 @@ const colors = {
     gray: "#808080",
     cyan: "#00FFFF",
     magenta: "#FF00FF",
+    boneWhite: "#F9F6EE",
     lime: "#00FF00",
     teal: "#008080",
     navy: "#000080",

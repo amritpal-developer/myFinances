@@ -23,6 +23,7 @@ export async function requestUserPermission() {
 }
 async function getFCMToken() {
   try {
+    await messaging().registerDeviceForRemoteMessages();
     const token = await messaging().getToken();
     console.log('FCM Token:', token);
   } catch (error) {

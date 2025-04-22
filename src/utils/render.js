@@ -1,15 +1,16 @@
-import Menu from '../assets/svg/Menu.svg';
-import Dollar from '../assets/svg/Dollar.svg';
+import Menu from '../assets/svg/lightTheme/Menu.svg';
+import Dollar from '../assets/svg/lightTheme/Dollar.svg';
 import Netflix from '../assets/svg/SocialIcon/netflix.svg';
 import Spotify from '../assets/svg/SocialIcon/spotify.svg';
 import Amazon from '../assets/svg/SocialIcon/amazon.svg';
 import Airbnb from '../assets/svg/SocialIcon/airbnb.svg';
 import {StyleSheet, Text, TouchableOpacity, View} from 'react-native';
-import { height, width } from './data';
+import {height, width} from './data';
 import colors from './colors';
 import CommonText from '../components/CommonText';
-import { String } from './String';
-export function renderPurchases(item, index) {
+import {String} from './String';
+import {responsiveScreenFontSize} from 'react-native-responsive-dimensions';
+export function renderPurchases(item, index, isDarkMode) {
   const amount = item?.amount?.split('.');
   return (
     <TouchableOpacity style={[styles.purchaseBox]} key={index}>
@@ -28,48 +29,109 @@ export function renderPurchases(item, index) {
           )}
           <CommonText
             label={item?.name + '\n' + item?.date}
-            style={styles.choresText}
+            style={[
+              styles.choresText,
+              {color: isDarkMode ? colors?.white : colors?.black},
+            ]}
           />
         </View>
-        <Text style={styles.choresText}>
+        <Text
+          style={[
+            styles.choresText,
+            {color: isDarkMode ? colors?.white : colors?.black},
+          ]}>
           {amount[0]}.<Text style={styles.smallText}>{amount[1]}</Text>
         </Text>
       </View>
     </TouchableOpacity>
   );
 }
-export function renderEarnings({item, index}) {
+export function renderEarnings({item, index, isDarkMode}) {
   const amount = item?.amount?.split('.');
   return (
     <TouchableOpacity
-      style={[styles.earningBox, {backgroundColor: colors?.blackMist}]}>
+      style={[
+        styles.earningBox,
+        {backgroundColor: isDarkMode ? colors?.blackMist : colors?.boneWhite},
+      ]}>
       <View style={styles.rowLayout}>
-        <View style={{marginRight: '25%'}}>
+        <View style={styles.dollarIcon}>
           <Dollar width={String?.forty} height={String?.forty} />
         </View>
         <Menu width={String?.forty} height={String?.forty} />
       </View>
-      <CommonText label={item?.name} style={styles.choresText} />
-      <Text style={styles.choresText}>
-        {amount[0]}.<Text style={styles.smallText}>{amount[1]}</Text>
+      <CommonText
+        label={item?.name}
+        style={[
+          styles.choresText,
+          {color: isDarkMode ? colors?.white : colors?.black},
+        ]}
+      />
+      <Text
+        style={[
+          styles.choresText,
+          {color: isDarkMode ? colors?.white : colors?.black},
+        ]}>
+        {amount[0]}.
+        <Text
+          style={[
+            styles.smallText,
+            {color: isDarkMode ? colors?.white : colors?.black},
+          ]}>
+          {amount[1]}
+        </Text>
       </Text>
     </TouchableOpacity>
   );
 }
-export function renderChores({item, index}) {
+export function renderChores({item, index, isDarkMode,modalVisible}) {
   const amount = item?.amount?.split('.');
   return index == 0 ? (
-    <TouchableOpacity style={styles.addBox} onPress={{}}>
-      <CommonText label={'+'} style={{color: 'white', fontSize: 30}} />
+    <TouchableOpacity
+      style={[
+        styles.addBox,
+        {borderColor: isDarkMode ? colors?.white : colors?.black},
+      ]}
+      onPress={{}}>
+      <CommonText
+        label={'+'}
+        style={[
+          styles.plus,
+          {color: isDarkMode ? colors?.white : colors?.black},
+        ]}
+      />
     </TouchableOpacity>
   ) : (
     <TouchableOpacity
       style={[styles.choresBox, {backgroundColor: item?.color}]}>
-      <CommonText label={item?.name} style={styles.choresText} />
-      <Text style={styles.choresText}>
-        {amount[0]}.<Text style={styles.smallText}>{amount[1]}</Text>
+      <CommonText
+        label={item?.name}
+        style={[
+          styles.choresText,
+          {color: index != 1 ? colors?.black : colors?.white},
+        ]}
+      />
+      <Text
+        style={[
+          styles.choresText,
+          {color: index != 1 ? colors?.black : colors?.white},
+        ]}>
+        {amount[0]}.
+        <Text
+          style={[
+            styles.smallText,
+            {color: index != 1 ? colors?.black : colors?.white},
+          ]}>
+          {amount[1]}
+        </Text>
       </Text>
-      <CommonText label={item?.percentage} style={styles.percentageText} />
+      <CommonText
+        label={item?.percentage}
+        style={[
+          styles.percentageText,
+          {color: index != 1 ? colors?.black : colors?.white},
+        ]}
+      />
     </TouchableOpacity>
   );
 }
@@ -84,13 +146,19 @@ const styles = StyleSheet.create({
     marginVertical: '18%',
     borderWidth: 2,
     borderStyle: 'dotted',
-    borderColor: 'white',
+  },
+  dollarIcon: {marginRight: '25%'},
+  plus: {
+    fontSize: responsiveScreenFontSize(3),
   },
   purchaseLayout: {
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
     marginHorizontal: '5%',
+  },
+  smallText: {
+    fontSize: responsiveScreenFontSize(1.5),
   },
   columnLayout: {
     flexDirection: 'column',
@@ -100,10 +168,8 @@ const styles = StyleSheet.create({
   percentageBox: {
     padding: '3%',
     borderRadius: 20,
-    backgroundColor: colors?.gray,
   },
   choresBox: {
-    backgroundColor: colors?.blue,
     borderRadius: 16,
     height: height * 0.16,
     width: width * 0.3,
@@ -118,7 +184,6 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
   },
   earningBox: {
-    backgroundColor: colors?.blue,
     borderRadius: 16,
     height: height * 0.16,
     width: width * 0.4,
@@ -135,7 +200,6 @@ const styles = StyleSheet.create({
     marginVertical: '2%',
   },
   choresText: {
-    color: colors?.white,
     marginHorizontal: '5%',
     fontSize: 17,
   },
@@ -143,7 +207,6 @@ const styles = StyleSheet.create({
     padding: '3%',
     borderRadius: 20,
     backgroundColor: 'rgba(255,255,255,0.2)',
-    color: colors?.white,
     paddingHorizontal: '8%',
   },
 });

@@ -30,11 +30,13 @@ import {googleSignIn, signIn, signUp} from '../utils/auth';
 import CommonText from '../components/CommonText';
 import Google from '../assets/svg/SocialIcon/google.svg';
 import CustomAnimation from '../components/CustomAnimation';
+import {validateEmail, validateName,validatePassword} from '../utils/validation';
 const {width, height} = Dimensions.get('window');
-const Login = ({navigation}) => {
+const SignUpScreen = ({navigation}) => {
   const [email, setEmail] = useState('amrit66266@gmail.com');
   const [password, setPassword] = useState('Devil2517@');
   const [phoneNumber, setPhoneNumber] = useState('');
+  const [name, setName] = useState('');
   const [btnDisable, setBtnDisable] = useState(true);
   const [verificationId, setVerificationId] = useState(null);
   const [otp, setOtp] = useState('');
@@ -71,24 +73,36 @@ const Login = ({navigation}) => {
       Alert.alert(String?.EnterPhone);
     }
   };
-  const validate = async() => {
-    // Implement your login logic here
-    if (Regex(String?.email, email) && !Regex(String?.password, password)) {
-      Alert.alert(String?.validEmail);
-    } else if (
-      !Regex(String?.email, email) &&
-      Regex(String?.password, password)
-    ) {
-      Alert.alert(String?.validEmail);
-    } else if (
-      Regex(String?.email, email) &&
-      Regex(String?.password, password)
-    ) {
-      const response = await signIn(email, password);
+  const validate = async () => {
+    const nameError = validateName(name);
+    const emailError = validateEmail(email);
+    const passwordError = validatePassword(password);
+     // Check if there are any errors and show an alert for each
+     if (nameError) {
+      Alert.alert('Validation Error', nameError);
+      console.log('Validation Error', nameError);
+    } else if (emailError) {
+      Alert.alert('Validation Error', emailError);
+      console.log('Validation Error', emailError);
+    } else if (passwordError) {
+      Alert.alert('Validation Error', passwordError);
+      console.log('Validation Error', passwordError);
+    } else {
+      // If no errors, proceed with form submission (e.g., Firebase signup)
+      const response = await signUp(name,email, password);
+      if(response?.message){
+        Alert.alert(response?.message);
+        emptyValues();
+      }
       console.log('response', response);
-      setLoginSucceed(true);
+      console.log('Form Submitted!');
     }
   };
+  function emptyValues(){
+    setName("");
+    setEmail("");
+    setPassword("");
+  }
   function verifyPhoneNumber() {
     if (phoneNumber.length == 10) {
       setBtnDisable(false);
@@ -97,27 +111,6 @@ const Login = ({navigation}) => {
     }
   }
 
-  const handleGoogleSignIn = async () => {
-    const response = await googleSignIn();
-    console.log('✅ User Info:');
-    if (response.success) {
-      console.log('✅ User Info:', response.user);
-      console.log('Name:', response.name);
-      console.log('Email:', response.email);
-
-      Alert.alert('Login Success', `Welcome, ${response.name}`);
-
-      // Navigate to home screen with user info
-      navigation.navigate(String?.tabScreen, {
-        name: response.name,
-        email: response.email,
-        photoURL: response.photoURL,
-      });
-    } else {
-      console.error('❌ Error:', response.error);
-      Alert.alert('Login Failed', response.error);
-    }
-  };
   const sendVerificationCode = async () => {
     try {
       const confirmation = await auth().signInWithPhoneNumber(
@@ -177,11 +170,23 @@ const Login = ({navigation}) => {
           /> */}
           <CommonTextInput
             Styles={styles.textInput}
+            text={name}
+            label={String?.Name}
+            activeOutlineColor={'rgba(255, 255, 255, 0.3)'}
+            placeHolder={String?.Name}
+            keyboardType={String?.Default}
+            onChangeText={name => {
+              setName(name);
+            }}
+          />
+          <CommonTextInput
+            Styles={styles.textInput}
             text={email}
             label={String?.email}
             activeOutlineColor={'rgba(255, 255, 255, 0.3)'}
             placeHolder={String?.PhonePlaceHolder}
             textContentType={String?.TelephoneNumberText}
+            keyboardType={String?.Default}
             onChangeText={email => {
               setEmail(email);
             }}
@@ -207,41 +212,21 @@ const Login = ({navigation}) => {
           <Button
             style={styles.button}
             pressFunction={validate}
-            label={String?.LoginScreen}
+            label={String?.Proceed}
             labelStyle={styles.buttonText}
           />
         </View>
         <View style={styles.signupContainer}>
-          <Text style={styles.signupText}>{String?.NoAccount}</Text>
+          <Text style={styles.signupText}>{String?.HaveAccount}</Text>
           <TouchableOpacity
             onPress={() => {
               console.log('click');
-              navigation.navigate(String?.SignUpScreen);
+              navigation.navigate(String?.LoginScreen);
             }}>
             <Text style={[styles.signupText, {fontWeight: 'bold'}]}>
-              {String?.SignUp}
+              {String?.LoginText}
             </Text>
           </TouchableOpacity>
-        </View>
-
-        <View style={styles.googlepressableView}>
-          <TouchableOpacity
-            style={styles.googlePressable}
-            onPress={handleGoogleSignIn}>
-            <View style={styles.googleImage}>
-              <Google style={styles.googlestyle} />
-              <CommonText label={String?.google} style={styles.googleText} />
-            </View>
-          </TouchableOpacity>
-
-          {Platform.OS == 'ios' && (
-            <TouchableOpacity style={styles.applePressable} onPress={{}}>
-              <View style={styles.facebookImage}>
-                <AntDesign name="apple1" size={18} />
-                <CommonText label={String?.apple} style={styles.googleText} />
-              </View>
-            </TouchableOpacity>
-          )}
         </View>
       </SafeAreaView>
     </LinearGradient>
@@ -379,4 +364,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default React.memo(Login);
+export default React.memo(SignUpScreen);

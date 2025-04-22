@@ -14,14 +14,6 @@
       },
       "oauth_client": [
         {
-          "client_id": "787255236981-jtbkt8pe6dmpmnhrlq5h91upjl5t2mkh.apps.googleusercontent.com",
-          "client_type": 1,
-          "android_info": {
-            "package_name": "com.myfinances",
-            "certificate_hash": "d879f35bb4732085800eeadf81d067373c06f1b9"
-          }
-        },
-        {
           "client_id": "787255236981-i9ds36ediqg8djhu88m3a83ok3f5s4un.apps.googleusercontent.com",
           "client_type": 3
         }

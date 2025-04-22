@@ -5,28 +5,21 @@
 import {AppRegistry} from 'react-native';
 import App from './App';
 import {name as appName} from './app.json';
-import { Provider } from 'react-redux';
-import { store } from './src/dataManagement/store';
-import { MD2LightTheme, PaperProvider } from 'react-native-paper';
-const theme = {
-  ...MD2LightTheme,
+import {Provider} from 'react-redux';
+import {store} from './src/dataManagement/store';
+import {useTheme, PaperProvider} from 'react-native-paper';
+import {ThemeProvider} from './src/utils/ThemeProvider';
 
-  // Specify a custom property
-  custom: 'property',
-
-  // Specify a custom nested property
-  colors: {
-    ...MD2LightTheme.colors,
-    primary: '#fefefe',
-  },
-};
-
-const Root = () => (
-  
+const Root = () => {
+  const {theme} = useTheme();
+  return (
     <Provider store={store}>
       <PaperProvider theme={theme}>
-        <App />
+        <ThemeProvider>
+          <App />
+        </ThemeProvider>
       </PaperProvider>
     </Provider>
   );
+};
 AppRegistry.registerComponent(appName, () => Root);

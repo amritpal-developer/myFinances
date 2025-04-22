@@ -18,6 +18,10 @@
 	<string>APPL</string>
 	<key>CFBundleShortVersionString</key>
 	<string>$(MARKETING_VERSION)</string>
+	<key>NSSpeechRecognitionUsageDescription</key>
+<string>We need access to speech recognition for voice input.</string>
+<key>NSMicrophoneUsageDescription</key>
+<string>We need access to your microphone for voice commands.</string>
 	<key>CFBundleSignature</key>
 	<string>????</string>
 	<key>CFBundleURLSchemes</key>

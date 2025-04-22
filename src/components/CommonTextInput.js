@@ -29,6 +29,7 @@ const CommonTextInput = ({
       text: '#FFF',
       placeholder: 'rgba(255, 255, 255, 0.6)',
     },
+    outlineColor: '#FFF',
   };
   return (
     <TextInput
@@ -37,12 +38,11 @@ const CommonTextInput = ({
       maxLength={maxLength}
       mode={OutlinedMode || 'outlined'}
       label={
-        <View style={[styles.labelContainer, styles.labelFocused]}>
-          <Text style={[styles.labelText, styles.labelTextFocused]}>
-            {label}
-          </Text>
-        </View>
+        <Text style={[styles.labelText, styles.labelTextFocused]}>{label}</Text>
       }
+      outlineStyle={{
+        borderWidth: responsiveScreenFontSize(0.2),
+      }}
       textAlignVertical="center"
       textAlign="center"
       onFocus={() => setFocused(true)}
@@ -50,10 +50,11 @@ const CommonTextInput = ({
       placeholderTextColor="rgba(255, 255, 255, 0.6)" // ✅ Light white with opacity
       theme={theme}
       secureTextEntry={secureTextEntry}
+      activeOutlineColor={'white'}
       // activeOutlineColor={activeOutlineColor}
       contentStyle={styles.contentStyle}
       placeholder={placeholder}
-      // outlineColor='rgba(255, 255, 255, 0.3)'
+      outlineColor="white"
       value={text}
       onChangeText={onChangeText}
       right={right}
@@ -66,7 +67,6 @@ const CommonTextInput = ({
 };
 
 export default CommonTextInput;
-
 const styles = StyleSheet.create({
   contentStyle: {
     alignItems: 'center',
@@ -83,16 +83,17 @@ const styles = StyleSheet.create({
   },
   labelContainer: {
     backgroundColor: 'transparent', // Default state
-    paddingHorizontal: 4,
+    paddingHorizontal: responsiveScreenFontSize(0.5),
   },
   labelFocused: {
     backgroundColor: 'rgba(20,143,203,255)', // ✅ Change label background when focused
-    borderRadius: 4,
     color: colors?.white,
   },
   labelText: {
-    fontSize: responsiveScreenFontSize(2),
+    fontSize: responsiveScreenFontSize(2.5),
     color: colors?.white,
+    paddingHorizontal: responsiveScreenFontSize(1.5),
+    backgroundColor: 'rgba(20,143,203,255)',
   },
   labelTextFocused: {
     color: colors?.white, // ✅ Change text color when focused
