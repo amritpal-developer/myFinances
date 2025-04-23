@@ -8,7 +8,7 @@ import { onAuthStateChanged } from 'firebase/auth';
 import { String } from './src/utils/String';
 import LoadingScreen from './src/screens/LoadingScreen';
 import Route from './src/navigation/Route';
-
+import SplashScreen from 'react-native-splash-screen';
 LogBox.ignoreAllLogs();
 
 const App = () => {
@@ -17,6 +17,7 @@ const App = () => {
 
   // Firebase Auth state listener (always called, never conditionally)
   useEffect(() => {
+    SplashScreen.hide(); 
     const unsubscribe = onAuthStateChanged(auth, (user) => {
       setUser(user);  // Update user state
       setIsLoading(false); // Stop loading when the auth state is determined
