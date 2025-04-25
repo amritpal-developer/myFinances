@@ -17,6 +17,7 @@ export const String = {
   apple:'Sign in with Apple',
   password:'Password',
   image: 'image',
+  theme:'theme',
   photo: 'photo',
   budgetText: 'Your Budget',
   hi: 'Hi',

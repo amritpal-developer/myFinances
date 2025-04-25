@@ -27,18 +27,14 @@ import {
 import {renderChores, renderEarnings, renderPurchases} from '../utils/render';
 import {CommonModal} from '../components/CommonModal';
 import {useTheme as useCustomTheme} from '../utils/ThemeProvider';
+import { useSelector } from 'react-redux';
+import { toggleTheme } from '../dataManagement/slices/themeSlice';
 const Home = ({navigation}) => {
-  const {isDarkMode, toggleTheme} = useCustomTheme();
+  const isDarkMode = useSelector((state) => state.theme.isDarkMode);
   const [modalVisible, setModalVisible] = React.useState(false);
   const addItems = [{name: 'Add Items'}];
-  const themeColors = {
-    dark: 'black',
-    light: 'white',
-  };
-  const themeColorsText = {
-    light: 'black',
-    dark: 'white',
-  };
+  // Function to open modal
+const openModal = () => setModalVisible(true);
   const totalAmount = choresData
     .map(item => parseFloat(item.amount.replace('$', ''))) // Remove $ and convert to number
     .reduce((acc, curr) => acc + curr, 0)
@@ -123,7 +119,9 @@ const Home = ({navigation}) => {
           </View>
         </View>
         <CommonFlatList
-          renderItem={(item, index) => renderChores(item, index, isDarkMode,modalVisible)}
+          renderItem={({ item, index }) =>
+            renderChores({ item, index, isDarkMode, openModal })
+          }
           contentContainerStyle={styles.contentContainerStyle}
           data={addItems.concat(choresData)}
           horizontalFlag={true}
@@ -136,7 +134,7 @@ const Home = ({navigation}) => {
           ]}
         />
         <CommonFlatList
-          renderItem={(item, index) => renderEarnings(item, index, isDarkMode)}
+          renderItem={({item, index}) => renderEarnings({item, index, isDarkMode})}
           data={EarningsData}
           contentContainerStyle={styles.contentContainerStyle}
           horizontalFlag={true}

@@ -11,6 +11,7 @@ import {
 import {width} from '../utils/data';
 import colors from '../utils/colors';
 import RNPickerSelect from 'react-native-picker-select';
+import { responsiveScreenHeight, responsiveScreenWidth } from 'react-native-responsive-dimensions';
 export function CommonModal({
   isVisible = false,
   onClose,
@@ -54,6 +55,7 @@ export function CommonModal({
   };
 
   return (
+    console.log('modal',typeOfModal),
     <Modal
       visible={isVisible}
       animationInTiming={1000}
@@ -170,7 +172,9 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
   },
   overlay: {
-    flex: 1,
+    flex:1,
+    height:responsiveScreenHeight(20),
+    width:responsiveScreenWidth(20),
     backgroundColor: '#000000aa',
     justifyContent: 'center',
     padding: 20,

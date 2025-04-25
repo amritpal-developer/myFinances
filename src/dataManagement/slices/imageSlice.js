@@ -1,5 +1,5 @@
 import { createSlice } from '@reduxjs/toolkit';
-import { String } from '../utils/String';
+import { String } from '../../utils/String';
 const imageSlice = createSlice({
   name: String?.image,
   initialState: { uri: null },

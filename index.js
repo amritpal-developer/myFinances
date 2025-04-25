@@ -1,25 +1,26 @@
-/**
- * @format
- */
-
-import {AppRegistry} from 'react-native';
+import { AppRegistry } from 'react-native';
 import App from './App';
-import {name as appName} from './app.json';
-import {Provider} from 'react-redux';
-import {store} from './src/dataManagement/store';
-import {useTheme, PaperProvider} from 'react-native-paper';
-import {ThemeProvider} from './src/utils/ThemeProvider';
+import { name as appName } from './app.json';
+import { Provider } from 'react-redux';
+import { store } from './src/dataManagement/store';
+import { PaperProvider } from 'react-native-paper';
+import { ThemeProvider, useTheme } from './src/utils/ThemeProvider';
 
-const Root = () => {
-  const {theme} = useTheme();
+const AppWithTheme = () => {
+  const { theme } = useTheme();
   return (
-    <Provider store={store}>
-      <PaperProvider theme={theme}>
-        <ThemeProvider>
-          <App />
-        </ThemeProvider>
-      </PaperProvider>
-    </Provider>
+    <PaperProvider theme={theme}>
+      <App />
+    </PaperProvider>
   );
 };
+
+const Root = () => (
+  <Provider store={store}>
+    <ThemeProvider>
+      <AppWithTheme />
+    </ThemeProvider>
+  </Provider>
+);
+
 AppRegistry.registerComponent(appName, () => Root);

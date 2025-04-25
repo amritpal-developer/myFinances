@@ -1,4 +1,5 @@
 import Menu from '../assets/svg/lightTheme/Menu.svg';
+import DarkMenu from '../assets/svg/darkTheme/darkMenu.svg';
 import Dollar from '../assets/svg/lightTheme/Dollar.svg';
 import Netflix from '../assets/svg/SocialIcon/netflix.svg';
 import Spotify from '../assets/svg/SocialIcon/spotify.svg';
@@ -52,13 +53,17 @@ export function renderEarnings({item, index, isDarkMode}) {
     <TouchableOpacity
       style={[
         styles.earningBox,
-        {backgroundColor: isDarkMode ? colors?.blackMist : colors?.boneWhite},
+        {backgroundColor: isDarkMode ? colors?.blackMist : colors?.grayWhite},
       ]}>
       <View style={styles.rowLayout}>
         <View style={styles.dollarIcon}>
           <Dollar width={String?.forty} height={String?.forty} />
         </View>
-        <Menu width={String?.forty} height={String?.forty} />
+        {isDarkMode ? (
+          <Menu width={String?.forty} height={String?.forty} />
+        ) : (
+          <DarkMenu width={String?.forty} height={String?.forty} />
+        )}
       </View>
       <CommonText
         label={item?.name}
@@ -84,23 +89,26 @@ export function renderEarnings({item, index, isDarkMode}) {
     </TouchableOpacity>
   );
 }
-export function renderChores({item, index, isDarkMode,modalVisible}) {
+export function renderChores({item, index, isDarkMode,openModal}) {
   const amount = item?.amount?.split('.');
   return index == 0 ? (
-    <TouchableOpacity
-      style={[
-        styles.addBox,
-        {borderColor: isDarkMode ? colors?.white : colors?.black},
-      ]}
-      onPress={{}}>
-      <CommonText
-        label={'+'}
+    (console.log('isDark', isDarkMode),
+    (
+      <TouchableOpacity
         style={[
-          styles.plus,
-          {color: isDarkMode ? colors?.white : colors?.black},
+          styles.addBox,
+          {borderColor: isDarkMode ? colors?.white : colors?.black},
         ]}
-      />
-    </TouchableOpacity>
+        onPress={openModal}>
+        <CommonText
+          label={'+'}
+          style={[
+            styles.plus,
+            {color: isDarkMode ? colors?.white : colors?.black},
+          ]}
+        />
+      </TouchableOpacity>
+    ))
   ) : (
     <TouchableOpacity
       style={[styles.choresBox, {backgroundColor: item?.color}]}>

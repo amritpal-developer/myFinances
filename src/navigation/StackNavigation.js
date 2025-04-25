@@ -18,7 +18,7 @@ import {Alert, Image, StyleSheet, TouchableOpacity, View} from 'react-native';
 import CommonText from '../components/CommonText';
 import colors from '../utils/colors';
 import ProfileLight from '../assets/svg/lightTheme/profile.svg';
-import ProfileDark from '../assets/svg/darkTheme/profile.svg';
+import ProfileDark from '../assets/svg/darkTheme/darkProfile.svg';
 import {useState} from 'react';
 import {useSelector} from 'react-redux';
 import {Avatar} from 'react-native-paper';
@@ -48,7 +48,7 @@ function HeaderLeft(screen, isDarkMode) {
         onPress={() => setModalVisible(true)}
         style={styles.profileIcon}>
         {!imageUri ? (
-          isDarkMode ? (
+          isDarkMode? (
             <ProfileLight
               width={String?.fortyFive}
               height={String?.fortyFive}
@@ -62,7 +62,7 @@ function HeaderLeft(screen, isDarkMode) {
       </TouchableOpacity>
       <CommonText
         label={String?.hi + ' AMRITPAL' + '\n' + String?.budgetText}
-        style={[styles.expenseText, {color: 'white'}]}
+        style={[styles.expenseText, {color:isDarkMode? colors?.white:colors?.black}]}
       />
     </View>
   ) : (
@@ -87,13 +87,13 @@ function HeaderRight(screen, isDarkMode,navigation) {
       <Button
         style={styles.headerRightButton}
         label={String?.MyTransactions}
-        labelStyle={{color: colors?.white}}
+        labelStyle={{color:isDarkMode? colors?.white:colors?.black}}
       />
       <TouchableOpacity onPress={()=>handleSignOut(navigation)}>
         <Ionicons
           name="exit-outline"
           size={30}
-          color={'white'}
+          color={isDarkMode? colors?.white:colors?.black}
           style={styles.exit}
         />
       </TouchableOpacity>
@@ -112,7 +112,7 @@ export function StackNavigation({initialRouteName}) {
           <Stack.Screen
           options={({ navigation }) => ({
               headerLeft: () => HeaderLeft(screen?.name, isDarkMode),
-              headerStyle: isDarkMode
+              headerStyle: !isDarkMode
                 ? styles.headerStyleWhite
                 : styles.headerStyleBlack,
               headerTitle: () => HeaderTitle(screen?.name, isDarkMode),
