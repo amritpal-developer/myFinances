@@ -30,9 +30,15 @@ import {googleSignIn, signIn, signUp} from '../utils/auth';
 import CommonText from '../components/CommonText';
 import Google from '../assets/svg/SocialIcon/google.svg';
 import CustomAnimation from '../components/CustomAnimation';
-import {validateEmail, validateName,validatePassword} from '../utils/validation';
+import {
+  validateEmail,
+  validateName,
+  validatePassword,
+} from '../utils/validation';
+import {useDispatch} from 'react-redux';
 const {width, height} = Dimensions.get('window');
 const SignUpScreen = ({navigation}) => {
+  const dispatch = useDispatch();
   const [email, setEmail] = useState('amrit66266@gmail.com');
   const [password, setPassword] = useState('Devil2517@');
   const [phoneNumber, setPhoneNumber] = useState('');
@@ -77,8 +83,8 @@ const SignUpScreen = ({navigation}) => {
     const nameError = validateName(name);
     const emailError = validateEmail(email);
     const passwordError = validatePassword(password);
-     // Check if there are any errors and show an alert for each
-     if (nameError) {
+    // Check if there are any errors and show an alert for each
+    if (nameError) {
       Alert.alert('Validation Error', nameError);
       console.log('Validation Error', nameError);
     } else if (emailError) {
@@ -89,19 +95,22 @@ const SignUpScreen = ({navigation}) => {
       console.log('Validation Error', passwordError);
     } else {
       // If no errors, proceed with form submission (e.g., Firebase signup)
-      const response = await signUp(name,email, password);
-      if(response?.message){
+      const response = await signUp(name, email, password);
+      if (response?.message) {
         Alert.alert(response?.message);
         emptyValues();
+      } else {
+        dispatch(response?.user?.uid);
+        navigation.navigate(String?.tabScreen);
       }
       console.log('response', response);
       console.log('Form Submitted!');
     }
   };
-  function emptyValues(){
-    setName("");
-    setEmail("");
-    setPassword("");
+  function emptyValues() {
+    setName('');
+    setEmail('');
+    setPassword('');
   }
   function verifyPhoneNumber() {
     if (phoneNumber.length == 10) {

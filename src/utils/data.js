@@ -21,18 +21,18 @@ export const height = Dimensions.get('screen').height;
 export const currentMonth = moment().format('dddd');
 export const width = Dimensions.get('screen').width;
 export const categoryOptions = [
-  { label: 'Food', value: 'food' },
-  { label: 'House Rent', value: 'house_rent' },
-  { label: 'Subscription', value: 'subscription' },
-  { label: 'Course Fee', value: 'course_fee' },
-  { label: 'Others', value: 'others' },
+  {label: 'Food', value: 'food'},
+  {label: 'House Rent', value: 'house_rent'},
+  {label: 'Subscription', value: 'subscription'},
+  {label: 'Course Fee', value: 'course_fee'},
+  {label: 'Others', value: 'others'},
 ];
 export const tabScreens = [
   {
     name: String?.homeScreen,
     component: home,
     tabBarLabel: String?.homeScreen,
-    tabBarIcon: (focused) => (
+    tabBarIcon: focused => (
       <TouchableOpacity
         style={
           focused
@@ -41,7 +41,7 @@ export const tabScreens = [
                 backgroundColor: colors?.purple,
                 borderRadius: 100,
               }
-              : {padding:0}
+            : {padding: 0}
         }>
         <Home
           width={String?.twentyFive}
@@ -55,7 +55,7 @@ export const tabScreens = [
     name: String?.DashboardScreen,
     component: Dashboard,
     tabBarLabel: String?.DashboardScreen,
-    tabBarIcon: (focused) => (
+    tabBarIcon: focused => (
       <TouchableOpacity
         style={
           focused
@@ -64,7 +64,7 @@ export const tabScreens = [
                 backgroundColor: colors?.purple,
                 borderRadius: 100,
               }
-              : {padding:0}
+            : {padding: 0}
         }>
         <Calculator width={String?.twentyFive} height={String?.twentyFive} />
       </TouchableOpacity>
@@ -74,7 +74,7 @@ export const tabScreens = [
     name: String?.profileScreen,
     component: profile,
     tabBarLabel: String?.profileScreen,
-    tabBarIcon: (focused) => (
+    tabBarIcon: focused => (
       <TouchableOpacity
         style={
           focused
@@ -83,7 +83,7 @@ export const tabScreens = [
                 backgroundColor: colors?.purple,
                 borderRadius: 100,
               }
-              : {padding:0}
+            : {padding: 0}
         }>
         <Profile width={String?.twentyFive} height={String?.twentyFive} />
       </TouchableOpacity>
@@ -93,18 +93,18 @@ export const tabScreens = [
     name: String?.historyScreen,
     component: History,
     tabBarLabel: String?.historyScreen,
-    tabBarIcon: (focused) => (
+    tabBarIcon: focused => (
       <TouchableOpacity
-      style={
-        focused
-          ? {
-              padding: '40%',
-              backgroundColor: colors?.purple,
-              borderRadius: 100,
-            }
-          : {padding:0}
-      }>
-      <HistoryIcon width={String?.twentyFive} height={String?.twentyFive} />
+        style={
+          focused
+            ? {
+                padding: '40%',
+                backgroundColor: colors?.purple,
+                borderRadius: 100,
+              }
+            : {padding: 0}
+        }>
+        <HistoryIcon width={String?.twentyFive} height={String?.twentyFive} />
       </TouchableOpacity>
     ),
   },
@@ -117,25 +117,28 @@ export const StackScreens = [
   {name: String?.historyScreen, component: History},
   {name: String?.chatScreen, component: ChatScreen},
   {name: String?.SignUpScreen, component: SignUpScreen},
-  {name: String?.LoadingScreen, component:LoadingScreen},
+  {name: String?.LoadingScreen, component: LoadingScreen},
   // Add more screens as needed
 ];
 export const profileImage = require('../assets/png/profile.png');
 export const GrayProfileImage = require('../assets/png/grayProfile.png');
 export const choresData = [
   {
+    id: 1,
     name: String?.housing,
     amount: '$570.75',
     percentage: '61%',
     color: colors?.purple,
   },
   {
+    id: 2,
     name: String?.food,
     amount: '$90.75',
     percentage: '21%',
     color: colors?.skyBlue,
   },
   {
+    id: 3,
     name: String?.saving,
     amount: '$780.75',
     percentage: '50%',

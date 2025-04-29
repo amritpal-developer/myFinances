@@ -5,6 +5,7 @@ import {OutlinedMode} from '../utils/String';
 import {responsiveScreenFontSize} from 'react-native-responsive-dimensions';
 import {useState} from 'react';
 import colors from '../utils/colors';
+import CommonText from './CommonText';
 const CommonTextInput = ({
   text,
   onChangeText,
@@ -22,14 +23,24 @@ const CommonTextInput = ({
   secureTextEntry,
 }) => {
   const [focused, setFocused] = useState(false);
+  // const theme = {
+  //   roundness: responsiveScreenFontSize(1.5),
+  //   colors: {
+  //     primary: '#FFF',
+  //     text: '#FFF',
+  //     placeholder: 'rgba(255, 255, 255, 0.6)',
+  //   },
+  //   outlineColor: '#FFF',
+  // };
   const theme = {
+    ...DefaultTheme,
     roundness: responsiveScreenFontSize(1.5),
     colors: {
-      primary: '#FFF',
-      text: '#FFF',
+      ...DefaultTheme.colors,
       placeholder: 'rgba(255, 255, 255, 0.6)',
+      text: '#FFF',
+      primary: '#2196F3', // your primary color
     },
-    outlineColor: '#FFF',
   };
   return (
     <TextInput
@@ -38,7 +49,11 @@ const CommonTextInput = ({
       maxLength={maxLength}
       mode={OutlinedMode || 'outlined'}
       label={
-        <Text style={[styles.labelText, styles.labelTextFocused]}>{label}</Text>
+        <View style={{backgroundColor: 'transparent'}}>
+          <Text style={[styles.labelText, styles.labelTextFocused]}>
+            {' ' + label + ' '}
+          </Text>
+        </View>
       }
       outlineStyle={{
         borderWidth: responsiveScreenFontSize(0.2),
@@ -92,7 +107,6 @@ const styles = StyleSheet.create({
   labelText: {
     fontSize: responsiveScreenFontSize(2.5),
     color: colors?.white,
-    paddingHorizontal: responsiveScreenFontSize(1.5),
     backgroundColor: 'rgba(20,143,203,255)',
   },
   labelTextFocused: {

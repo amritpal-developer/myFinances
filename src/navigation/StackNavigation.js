@@ -14,7 +14,14 @@ import {signOut} from 'firebase/auth';
 import {auth} from '../../firebaseConfig';
 import Button from '../components/Button';
 import Ionicons from 'react-native-vector-icons/Ionicons';
-import {Alert, Image, StyleSheet, TouchableOpacity, View} from 'react-native';
+import {
+  Alert,
+  Image,
+  SafeAreaView,
+  StyleSheet,
+  TouchableOpacity,
+  View,
+} from 'react-native';
 import CommonText from '../components/CommonText';
 import colors from '../utils/colors';
 import ProfileLight from '../assets/svg/lightTheme/profile.svg';
@@ -24,7 +31,9 @@ import {useSelector} from 'react-redux';
 import {Avatar} from 'react-native-paper';
 import ImagePickerModal from '../components/ImagePickerModal';
 import {useTheme as useCustomTheme, useTheme} from '../utils/ThemeProvider';
-import { logout } from '../utils/auth';
+import {logout} from '../utils/auth';
+import CustomDialog from '../components/CustomDialog';
+import AppHeader from '../components/header/AppHeader';
 const imageUri = useSelector(state => state.image.uri);
 const Stack = createStackNavigator();
 function HeaderLeft(screen, isDarkMode) {
@@ -48,7 +57,7 @@ function HeaderLeft(screen, isDarkMode) {
         onPress={() => setModalVisible(true)}
         style={styles.profileIcon}>
         {!imageUri ? (
-          isDarkMode? (
+          isDarkMode ? (
             <ProfileLight
               width={String?.fortyFive}
               height={String?.fortyFive}
@@ -62,17 +71,21 @@ function HeaderLeft(screen, isDarkMode) {
       </TouchableOpacity>
       <CommonText
         label={String?.hi + ' AMRITPAL' + '\n' + String?.budgetText}
-        style={[styles.expenseText, {color:isDarkMode? colors?.white:colors?.black}]}
+        style={[
+          styles.expenseText,
+          {color: isDarkMode ? colors?.white : colors?.black},
+        ]}
       />
     </View>
   ) : (
     <View></View>
   );
 }
-async function handleSignOut(navigation) {
+async function handleSignOut(navigation, onCancel) {
   try {
     await logout(auth);
     console.log('User signed out');
+    onCancel();
     navigation.navigate(String?.LoginScreen);
   } catch (error) {
     console.error('Sign out error:', error.message);
@@ -81,19 +94,31 @@ async function handleSignOut(navigation) {
 function HeaderTitle(screen, isDarkMode) {
   return <View></View>;
 }
-function HeaderRight(screen, isDarkMode,navigation) {
+function HeaderRight(screen, isDarkMode, navigation) {
+  const [isDialogOpen, setIsDialogOpen] = useState(false);
+  function onCancel() {
+    setIsDialogOpen(false);
+  }
   return screen == String.tabScreen ? (
-    <View style={{flexDirection: 'row',alignItems:'center'}}>
+    <View style={{flexDirection: 'row', alignItems: 'center'}}>
+      <CustomDialog
+        visible={isDialogOpen}
+        type="delete"
+        title="Delete Item"
+        message="Are you sure you want to Logout?"
+        onConfirm={handleSignOut(navigation, onCancel)}
+        onCancel={onCancel}
+      />
       <Button
         style={styles.headerRightButton}
         label={String?.MyTransactions}
-        labelStyle={{color:isDarkMode? colors?.white:colors?.black}}
+        labelStyle={{color: isDarkMode ? colors?.white : colors?.black}}
       />
-      <TouchableOpacity onPress={()=>handleSignOut(navigation)}>
+      <TouchableOpacity onPress={() => setIsDialogOpen(true)}>
         <Ionicons
           name="exit-outline"
           size={30}
-          color={isDarkMode? colors?.white:colors?.black}
+          color={isDarkMode ? colors?.white : colors?.black}
           style={styles.exit}
         />
       </TouchableOpacity>
@@ -108,20 +133,26 @@ export function StackNavigation({initialRouteName}) {
   return (
     <NavigationContainer theme={theme}>
       <Stack.Navigator initialRouteName={initialRouteName}>
-        {StackScreens?.map((screen, index) => (
+        {StackScreens.map((screen, index) => (
           <Stack.Screen
-          options={({ navigation }) => ({
-              headerLeft: () => HeaderLeft(screen?.name, isDarkMode),
-              headerStyle: !isDarkMode
-                ? styles.headerStyleWhite
-                : styles.headerStyleBlack,
-              headerTitle: () => HeaderTitle(screen?.name, isDarkMode),
-              headerRight: () => HeaderRight(screen?.name, isDarkMode,navigation),
-              headerShown: screen?.name == String?.tabScreen ? true : false,
-            })}
             key={index}
             name={screen.name}
             component={screen.component}
+            options={({navigation}) => ({
+              headerShown: true,
+           
+              header: props => (
+                <AppHeader
+                  {...props}
+                  screen={screen.name}
+                  isDarkMode={isDarkMode}
+                  navigation={navigation}
+                />
+              ),
+              headerStyle: {
+                height: 100, // ⬅️ Add this
+              },
+            })}
           />
         ))}
       </Stack.Navigator>

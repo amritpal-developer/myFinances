@@ -6,7 +6,7 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
-import React, {useContext} from 'react';
+import React, {useContext, useEffect, useState} from 'react';
 import CommonText from '../components/CommonText';
 import {PieChart} from 'react-native-gifted-charts';
 import colors from '../utils/colors';
@@ -25,16 +25,38 @@ import {
   width,
 } from '../utils/data';
 import {renderChores, renderEarnings, renderPurchases} from '../utils/render';
+import RenderChoreItem from '../components/RenderChoreItem';
 import {CommonModal} from '../components/CommonModal';
 import {useTheme as useCustomTheme} from '../utils/ThemeProvider';
-import { useSelector } from 'react-redux';
-import { toggleTheme } from '../dataManagement/slices/themeSlice';
+import {useSelector} from 'react-redux';
+import {toggleTheme} from '../dataManagement/slices/themeSlice';
+import {getDocuments} from '../service/firestoreService';
+import {auth} from '../../firebaseConfig';
 const Home = ({navigation}) => {
-  const isDarkMode = useSelector((state) => state.theme.isDarkMode);
+  const isDarkMode = useSelector(state => state.theme.isDarkMode);
   const [modalVisible, setModalVisible] = React.useState(false);
-  const addItems = [{name: 'Add Items'}];
+  const addItems = [{id: 0, name: 'Add Items'}];
+  const [expenses, setExpenses] = useState([]);
+  const user = auth.currentUser;
+
+  const userId = user.uid;
+  useEffect(() => {
+    const fetchExpenses = async () => {
+      try {
+        const expensesData = await getDocuments(`users/${userId}/expenses`);
+        setExpenses(expensesData);
+      } catch (error) {
+        console.error('Error fetching expenses:', error);
+      }
+    };
+
+    if (userId) {
+      fetchExpenses();
+    }
+  }, [userId]);
+
   // Function to open modal
-const openModal = () => setModalVisible(true);
+  const openModal = () => setModalVisible(true);
   const totalAmount = choresData
     .map(item => parseFloat(item.amount.replace('$', ''))) // Remove $ and convert to number
     .reduce((acc, curr) => acc + curr, 0)
@@ -61,6 +83,12 @@ const openModal = () => setModalVisible(true);
   const handleAddExpense = data => {
     console.log('Added Expense:', data);
   };
+  const handleCancel = () => {
+    setModalVisible(false);
+  };
+  const handleLocalDelete = id => {
+    setChoresList(prevList => prevList.filter(item => item.id !== id));
+  };
   return (
     <SafeAreaView
       style={[
@@ -76,7 +104,7 @@ const openModal = () => setModalVisible(true);
         <CommonModal
           isVisible={modalVisible}
           onClose={() => setModalVisible(false)}
-          typeOfModal={String?.ImagePickerType}
+          typeOfModal={String?.AddExpensesType}
           onSubmit={handleAddExpense}
           categoryList={categoryOptions}
         />
@@ -118,13 +146,31 @@ const openModal = () => setModalVisible(true);
             />
           </View>
         </View>
+
         <CommonFlatList
-          renderItem={({ item, index }) =>
-            renderChores({ item, index, isDarkMode, openModal })
+          data={addItems.concat(expenses)}
+          renderItem={({item, index}) => (
+            <RenderChoreItem
+              item={item}
+              index={index}
+              isDarkMode={isDarkMode}
+              openModal={openModal}
+              deleteItem={handleLocalDelete}
+            />
+          )}
+          keyExtractor={(item, index) =>
+            item.id?.toString() || index.toString()
           }
-          contentContainerStyle={styles.contentContainerStyle}
-          data={addItems.concat(choresData)}
           horizontalFlag={true}
+          showsHorizontalScrollIndicator={false}
+          contentContainerStyle={{
+            paddingBottom: 10,
+          }}
+          decelerationRate={'fast'} // 🚀 Faster stopping for better snapping
+          snapToInterval={width * 0.32} // 📸 snap at each card size (card width + margin)
+          snapToAlignment={'start'} // start from the left
+          bounces={true} // iOS only (gives soft bounce)
+          scrollEventThrottle={16}
         />
         <CommonText
           label={String?.incomeTitle}
@@ -134,7 +180,9 @@ const openModal = () => setModalVisible(true);
           ]}
         />
         <CommonFlatList
-          renderItem={({item, index}) => renderEarnings({item, index, isDarkMode})}
+          renderItem={({item, index}) =>
+            renderEarnings({item, index, isDarkMode})
+          }
           data={EarningsData}
           contentContainerStyle={styles.contentContainerStyle}
           horizontalFlag={true}

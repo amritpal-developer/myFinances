@@ -5,7 +5,7 @@ import { Provider } from 'react-redux';
 import { store } from './src/dataManagement/store';
 import { PaperProvider } from 'react-native-paper';
 import { ThemeProvider, useTheme } from './src/utils/ThemeProvider';
-
+import { GestureHandlerRootView } from 'react-native-gesture-handler';
 const AppWithTheme = () => {
   const { theme } = useTheme();
   return (
@@ -14,13 +14,13 @@ const AppWithTheme = () => {
     </PaperProvider>
   );
 };
-
 const Root = () => (
-  <Provider store={store}>
-    <ThemeProvider>
-      <AppWithTheme />
-    </ThemeProvider>
-  </Provider>
+  <GestureHandlerRootView style={{ flex: 1 }}>
+    <Provider store={store}>
+      <ThemeProvider>
+        <AppWithTheme />
+      </ThemeProvider>
+    </Provider>
+  </GestureHandlerRootView>
 );
-
 AppRegistry.registerComponent(appName, () => Root);

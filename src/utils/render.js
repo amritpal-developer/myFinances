@@ -3,9 +3,10 @@ import DarkMenu from '../assets/svg/darkTheme/darkMenu.svg';
 import Dollar from '../assets/svg/lightTheme/Dollar.svg';
 import Netflix from '../assets/svg/SocialIcon/netflix.svg';
 import Spotify from '../assets/svg/SocialIcon/spotify.svg';
+import {Vibration} from 'react-native';
 import Amazon from '../assets/svg/SocialIcon/amazon.svg';
 import Airbnb from '../assets/svg/SocialIcon/airbnb.svg';
-import {StyleSheet, Text, TouchableOpacity, View} from 'react-native';
+import {Alert, StyleSheet, Text, TouchableOpacity, View} from 'react-native';
 import {height, width} from './data';
 import colors from './colors';
 import CommonText from '../components/CommonText';
@@ -86,60 +87,6 @@ export function renderEarnings({item, index, isDarkMode}) {
           {amount[1]}
         </Text>
       </Text>
-    </TouchableOpacity>
-  );
-}
-export function renderChores({item, index, isDarkMode,openModal}) {
-  const amount = item?.amount?.split('.');
-  return index == 0 ? (
-    (console.log('isDark', isDarkMode),
-    (
-      <TouchableOpacity
-        style={[
-          styles.addBox,
-          {borderColor: isDarkMode ? colors?.white : colors?.black},
-        ]}
-        onPress={openModal}>
-        <CommonText
-          label={'+'}
-          style={[
-            styles.plus,
-            {color: isDarkMode ? colors?.white : colors?.black},
-          ]}
-        />
-      </TouchableOpacity>
-    ))
-  ) : (
-    <TouchableOpacity
-      style={[styles.choresBox, {backgroundColor: item?.color}]}>
-      <CommonText
-        label={item?.name}
-        style={[
-          styles.choresText,
-          {color: index != 1 ? colors?.black : colors?.white},
-        ]}
-      />
-      <Text
-        style={[
-          styles.choresText,
-          {color: index != 1 ? colors?.black : colors?.white},
-        ]}>
-        {amount[0]}.
-        <Text
-          style={[
-            styles.smallText,
-            {color: index != 1 ? colors?.black : colors?.white},
-          ]}>
-          {amount[1]}
-        </Text>
-      </Text>
-      <CommonText
-        label={item?.percentage}
-        style={[
-          styles.percentageText,
-          {color: index != 1 ? colors?.black : colors?.white},
-        ]}
-      />
     </TouchableOpacity>
   );
 }
